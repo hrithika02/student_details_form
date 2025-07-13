@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Student Details Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-image: url("./images/bg.png");
+            background-size: cover;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .topic {
+            text-align: center;
+            color: white;
+            font-size: 40px;
+            margin-top: 40px;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            background-color: aliceblue;
+            padding: 20px;
+            color: black;
+            width: fit-content;
+            height: fit-content;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            border: solid grey 2px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-table,
+        .form-table td {
+            border: none;
+            text-align: left;
+        }
+
+        .form-table label {
+            font-size: 25px;
+        }
+
+        .form-table input {
+            background-color: transparent;
+            border: none;
+            border-bottom: 1px solid black;
+            padding: 7px 10px;
+            padding-right: 15px;
+        }
+
+        .form-table select {
+            background-color: transparent;
+            border: 1px solid black;
+            padding: 7px 10px;
+        }
+
+        .data {
+            background-color: aliceblue;
+            display: flex;
+        }
+
+        table {
+            width: 70%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            
+        }
+
+        table,
+        th,
+        td {
+            border: 2px solid gray;
+            padding: 7px;
+            text-align: center;
+        }
+
+        button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            background-color: #180066;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #180066;
+        }
+
+        .table {
+            width: 100%;
+            border: none;
+            height: 100%;
+        }
+
+        #studentTable {
+            border-radius: 10px;
+            display: none;
+        }
+
+        .popup {
+            background-color: white;
+            border-radius: 20px;
+            text-align: center;
+            width: fit-content;
+            height: fit-content;
+            padding: 15px;
+            display: none;
+            z-index: 10;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .popup img {
+            margin-top: 20px;
+            width: 250px;
+            height: 250px;
+        }
+
+        .overlay {
+            background-color: rgb(19, 18, 18);
+            opacity: 0.7;
+            height: 100%;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 5;
+            display: none;
+        }
+        @media (max-width:600px) {
+            .overlay{
+                display: none;
+            }
+            .popup{
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="topic">Student Registration Form</h1>
+    <div class="container">
+        <form id="studentForm" onsubmit="addStudent(event)">
+            <table class="form-table">
+                <h1>Enter your Details</h1>
+                <tr>
+                    <td><label>Name</label></td>
+                    <td><input type="text" id="name" placeholder="Enter your name" required></td>
+                </tr>
+                <tr>
+                    <td><label>Age</label></td>
+                    <td><input type="text" id="age" placeholder="Enter your age" required></td>
+                </tr>
+                <tr>
+                    <td><label>Gender</label></td>
+                    <td>
+                        <input type="radio" value="Male" name="gender" required> Male
+                        <input type="radio" value="Female" name="gender"> Female
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Course</label></td>
+                    <td>
+                        <select id="course" required>
+                            <option value="">--select--</option>
+                            <option>Javascript</option>
+                            <option>Python</option>
+                            <option>Java</option>
+                            <option>C++</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Email</label></td>
+                    <td><input type="email" id="email" placeholder="Enter your email" required></td>
+                </tr>
+            </table>
+            <button type="submit" id="btn">Submit</button>
+        </form>
+    </div>
+
+    <table class="data" id="studentTable">
+        <tr>
+            <th><h2>Name</h2></th>
+            <th><h2>Age</h2></th>
+            <th><h2>Course</h2></th>
+            <th><h2>Gender</h2></th>
+            <th><h2>Email</h2></th>
+            <th><h2>Action</h2></th>
+        </tr>
+    </table>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Popup -->
+    <div class="popup" id="popup">
+        <p style="text-align: right; cursor: pointer;" id="close">X</p>
+        <h2>You have Successfully Registered!</h2>
+        <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" alt="Tick">
+    </div>
+
+    <script>
+        const form = document.getElementById("studentForm");
+        const popup = document.getElementById("popup");
+        const overlay = document.getElementById("overlay");
+        const close = document.getElementById("close");
+
+        function addStudent(event) {
+            event.preventDefault();
+
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const name = document.getElementById("name").value;
+            const age = document.getElementById("age").value;
+            const course = document.getElementById("course").value;
+            const email = document.getElementById("email").value;
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+
+            document.getElementById("studentTable").style.display = "table";
+
+            const table = document.getElementById("studentTable");
+            const newRow = table.insertRow(-1);
+            newRow.innerHTML = `
+                <td>${name}</td>
+                <td>${age}</td>
+                <td>${course}</td>
+                <td>${gender}</td>
+                <td>${email}</td>
+                <td><button onclick="deleteRow(this)">Delete</button></td>
+            `;
+
+            form.reset();
+
+            popup.style.display = "block";
+            overlay.style.display = "block";
+        }
+
+        function deleteRow(btn) {
+            const row = btn.parentNode.parentNode;
+            row.remove();
+        }
+
+        close.addEventListener("click", function () {
+            popup.style.display = "none";
+            overlay.style.display = "none";
+        });
+    </script>
+</body>
+
+</html>
