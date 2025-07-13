@@ -10,4 +10,4 @@ This project captures student details through a responsive form and confirms suc
 - Confirmation pop-up on successful submission
 - Responsive design for all devices
 - Easy to customize
-Live Demo:[]
+Live Demo:[https://hrithika02.github.io/student_details_form/]
